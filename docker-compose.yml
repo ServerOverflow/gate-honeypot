@@ -9,6 +9,6 @@ services:
       - SERVER_ADDRESS=${SERVER_ADDRESS}
       - API_KEY=${API_KEY}
     volumes:
-      - /var/run/p0f.socket:/var/run/p0f.socket
+      - /run/p0f/p0f.socket:/var/run/p0f.socket
       - ./config.yml:/config.yml
     network_mode: host
