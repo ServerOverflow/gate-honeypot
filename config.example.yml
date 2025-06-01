@@ -1,0 +1,8 @@
+config:
+  bind: 0.0.0.0:25565
+  onlineMode: true
+  servers:
+    server: 127.0.0.1:25564
+  try:
+    - server
+  forceKeyAuthentication: false
