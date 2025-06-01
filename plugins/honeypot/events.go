@@ -25,11 +25,11 @@ const (
 type Event struct {
 	Type            EventType `json:"type"`
 	OperatingSystem string    `json:"operatingSystem"`
-	Protocol        int       `json:"protocol"`
+	Protocol        int32     `json:"protocol"`
 	SourceIp        string    `json:"sourceIp"`
-	SourcePort      int       `json:"sourcePort"`
+	SourcePort      int32     `json:"sourcePort"`
 	TargetIp        string    `json:"targetIp"`
-	TargetPort      int       `json:"targetPort"`
+	TargetPort      int32     `json:"targetPort"`
 	Username        *string   `json:"username,omitempty"`
 	Uuid            *string   `json:"uuid,omitempty"`
 }
@@ -65,7 +65,7 @@ func sendEvent(evt Event) {
 	split := strings.Split(address, ":")
 	port, _ := strconv.Atoi(split[1])
 	evt.TargetIp = split[0]
-	evt.TargetPort = port
+	evt.TargetPort = int32(port)
 
 	data, err := json.Marshal(evt)
 	if err != nil {

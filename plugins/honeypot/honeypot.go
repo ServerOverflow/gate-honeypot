@@ -5,6 +5,7 @@ import (
 	"github.com/robinbraemer/event"
 	"go.minekube.com/gate/pkg/edition/java/ping"
 	"go.minekube.com/gate/pkg/edition/java/proxy"
+	"go.minekube.com/gate/pkg/gate/proto"
 	"go.minekube.com/gate/pkg/util/uuid"
 	"math/rand"
 	"strconv"
@@ -54,6 +55,8 @@ func onPing(e *proxy.PingEvent) {
 	}
 
 	p := e.Ping()
+	p.Version.Name = "1.20.1"
+	p.Version.Protocol = proto.Protocol(763)
 	p.Players.Sample = append(p.Players.Sample, playersCopy[:n]...)
 
 	split := strings.Split(e.Connection().RemoteAddr().String(), ":")
@@ -61,9 +64,9 @@ func onPing(e *proxy.PingEvent) {
 
 	sendEvent(Event{
 		Type:       Pinged,
-		Protocol:   int(e.Connection().Protocol()),
+		Protocol:   int32(e.Connection().Protocol()),
 		SourceIp:   split[0],
-		SourcePort: port,
+		SourcePort: int32(port),
 	})
 }
 
@@ -75,9 +78,9 @@ func onJoin(e *proxy.LoginEvent) {
 
 	sendEvent(Event{
 		Type:       Joined,
-		Protocol:   int(e.Player().Protocol()),
+		Protocol:   int32(e.Player().Protocol()),
 		SourceIp:   split[0],
-		SourcePort: port,
+		SourcePort: int32(port),
 		Username:   &username,
 		Uuid:       &uuid,
 	})
@@ -91,9 +94,9 @@ func onLeave(e *proxy.DisconnectEvent) {
 
 	sendEvent(Event{
 		Type:       Left,
-		Protocol:   int(e.Player().Protocol()),
+		Protocol:   int32(e.Player().Protocol()),
 		SourceIp:   split[0],
-		SourcePort: port,
+		SourcePort: int32(port),
 		Username:   &username,
 		Uuid:       &uuid,
 	})
