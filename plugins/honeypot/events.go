@@ -23,9 +23,7 @@ const (
 )
 
 type Event struct {
-	ID              string    `json:"id"`
 	Type            EventType `json:"type"`
-	Timestamp       time.Time `json:"timestamp"`
 	OperatingSystem string    `json:"operatingSystem"`
 	Protocol        int       `json:"protocol"`
 	SourceIp        string    `json:"sourceIp"`
@@ -34,7 +32,6 @@ type Event struct {
 	TargetPort      int       `json:"targetPort"`
 	Username        *string   `json:"username,omitempty"`
 	Uuid            *string   `json:"uuid,omitempty"`
-	Description     string    `json:"description"`
 }
 
 var (
@@ -55,7 +52,6 @@ func StartEventSender() {
 }
 
 func sendEvent(evt Event) {
-
 	cli := p0fclient.NewP0fClient(p0fSocket)
 	err := cli.Connect()
 	if err != nil {
@@ -65,8 +61,6 @@ func sendEvent(evt Event) {
 
 	res, _ := cli.QueryIP(net.ParseIP(evt.SourceIp))
 	evt.OperatingSystem = string(res.OsName[:]) + " " + string(res.OsFlavor[:])
-	evt.Timestamp = time.Now()
-	evt.Description = ""
 
 	split := strings.Split(address, ":")
 	port, _ := strconv.Atoi(split[1])
