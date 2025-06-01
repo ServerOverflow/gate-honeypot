@@ -88,14 +88,21 @@ func sendEvent(evt Event) {
 		return
 	}
 
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("Failed to read response body: %v\n", err)
+		return
+	}
+
+	defer func() {
+		err := resp.Body.Close()
 		if err != nil {
-			log.Printf("Failed to read response: %v\n", err)
+			log.Printf("Failed to close response body: %v\n", err)
 		}
-	}(resp.Body)
+	}()
 
 	if resp.StatusCode >= 300 {
 		log.Printf("Failed with status code: %d\n", resp.StatusCode)
+		log.Print(string(bodyBytes))
 	}
 }
