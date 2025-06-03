@@ -28,6 +28,8 @@ type Event struct {
 	Protocol        int32     `json:"protocol"`
 	SourceIp        string    `json:"sourceIp"`
 	SourcePort      int32     `json:"sourcePort"`
+	HostDomain      string    `json:"hostDomain"`
+	HostPort        int32     `json:"hostPort"`
 	TargetIp        string    `json:"targetIp"`
 	TargetPort      int32     `json:"targetPort"`
 	Username        *string   `json:"username,omitempty"`

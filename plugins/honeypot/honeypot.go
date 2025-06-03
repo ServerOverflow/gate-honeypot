@@ -62,11 +62,16 @@ func onPing(e *proxy.PingEvent) {
 	split := strings.Split(e.Connection().RemoteAddr().String(), ":")
 	port, _ := strconv.Atoi(split[1])
 
+	split2 := strings.Split(e.Connection().VirtualHost().String(), ":")
+	port2, _ := strconv.Atoi(split[1])
+
 	sendEvent(Event{
 		Type:       Pinged,
 		Protocol:   int32(e.Connection().Protocol()),
 		SourceIp:   split[0],
 		SourcePort: int32(port),
+		HostDomain: split2[0],
+		HostPort:   int32(port2),
 	})
 }
 
@@ -74,15 +79,20 @@ func onJoin(e *proxy.LoginEvent) {
 	split := strings.Split(e.Player().RemoteAddr().String(), ":")
 	port, _ := strconv.Atoi(split[1])
 	username := e.Player().Username()
-	uuid := e.Player().ID().String()
+	uid := e.Player().ID().String()
+
+	split2 := strings.Split(e.Player().VirtualHost().String(), ":")
+	port2, _ := strconv.Atoi(split[1])
 
 	sendEvent(Event{
 		Type:       Joined,
 		Protocol:   int32(e.Player().Protocol()),
 		SourceIp:   split[0],
 		SourcePort: int32(port),
+		HostDomain: split2[0],
+		HostPort:   int32(port2),
 		Username:   &username,
-		Uuid:       &uuid,
+		Uuid:       &uid,
 	})
 }
 
@@ -92,11 +102,16 @@ func onLeave(e *proxy.DisconnectEvent) {
 	username := e.Player().Username()
 	uuid := e.Player().ID().String()
 
+	split2 := strings.Split(e.Player().VirtualHost().String(), ":")
+	port2, _ := strconv.Atoi(split[1])
+
 	sendEvent(Event{
 		Type:       Left,
 		Protocol:   int32(e.Player().Protocol()),
 		SourceIp:   split[0],
 		SourcePort: int32(port),
+		HostDomain: split2[0],
+		HostPort:   int32(port2),
 		Username:   &username,
 		Uuid:       &uuid,
 	})
